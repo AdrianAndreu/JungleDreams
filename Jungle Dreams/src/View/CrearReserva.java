@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 
 public class CrearReserva {
 
-	private JFrame frame;
+	private JFrame frmJungleDreams;
 	
 	/**
 	 * Create the application.
@@ -18,9 +18,9 @@ public class CrearReserva {
 	 * Initialize the contents of the frame.
 	 */
 	public void initialize() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmJungleDreams = new JFrame();
+		frmJungleDreams.setBounds(100, 100, 450, 300);
+		frmJungleDreams.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 }
