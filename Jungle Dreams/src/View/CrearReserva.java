@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 public class CrearReserva {
 
 	private JFrame frmJungleDreams;
+	
 	/**
 	 * Create the application.
 	 */
