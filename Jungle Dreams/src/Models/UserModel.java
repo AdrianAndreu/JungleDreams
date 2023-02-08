@@ -328,24 +328,25 @@ public class UserModel {
 	public void buscarUsuarios(String buscador,String texto) {
 		try {
 			if(buscador.equals("Email")&&!texto.equals("")) {
-				UserModel.numPagina=1;
 				rs=stmt.executeQuery("SELECT * FROM users WHERE email LIKE \"%"+texto+"%\"");
+				
 			}else if(buscador.equals("Nombre")&&!texto.equals("")) {
-				UserModel.numPagina=1;
 				rs=stmt.executeQuery("SELECT * FROM users WHERE nombre LIKE \"%"+texto+"%\"");
+				
 			}else if(buscador.equals("Apellidos")&&!texto.equals("")) {
-				UserModel.numPagina=1;
 				rs=stmt.executeQuery("SELECT * FROM users WHERE apellidos LIKE \"%"+texto+"%\"");
+				
 			}else if(buscador.equals("Telefono")&&!texto.equals("")){
-				UserModel.numPagina=1;
 				rs=stmt.executeQuery("SELECT * FROM users WHERE telefono LIKE \"%"+texto+"%\"");
+				
 			}else if(buscador.equals("De baja")){
 				rs=stmt.executeQuery("SELECT * FROM users WHERE fecha_baja IS NOT NULL");
-				UserModel.numPagina=1;
+				
 			}else {
-				UserModel.numPagina=1;
 				rs=stmt.executeQuery("SELECT * FROM users WHERE fecha_baja IS NULL");
+				
 			}
+			UserModel.numPagina=1;
 			
 		} catch (SQLException e) {
 			e.printStackTrace();

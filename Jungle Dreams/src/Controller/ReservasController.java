@@ -4,6 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
@@ -11,6 +14,7 @@ import javax.swing.JOptionPane;
 import Models.ReservasHabitacionesModel;
 import Models.ReservasModel;
 import Models.UserModel;
+import View.CrearReserva;
 import View.CrearUsuario;
 import View.MenuPrincipal;
 import View.ModificarUsuario;
@@ -21,7 +25,7 @@ public class ReservasController implements ActionListener,MouseListener{
 	ReservasHabitacionesModel reservasHabitacionesModel=new ReservasHabitacionesModel(); 
 	MenuPrincipal menuPrincipal;
 	VerReservaHabitación verReservaHabitación;
-	//CrearReserva crearReserva;
+	CrearReserva crearReserva;
 	//ModificarReserva modificarReserva;
 	public ReservasController(){}
 	public ReservasController(MenuPrincipal menuprincipal) {
@@ -34,10 +38,10 @@ public class ReservasController implements ActionListener,MouseListener{
 	/*public ReservasController(ModificarReserva modificarReserva) {
 		this.modificarReserva=modificarReserva;
 	}
-	
+	*/
 	public ReservasController(CrearReserva crearReserva) {
 		this.crearReserva=crearReserva;
-	}*/
+	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
@@ -47,7 +51,8 @@ public class ReservasController implements ActionListener,MouseListener{
 			menuPrincipal.getNumeroPaginaReservas().setText(ponerPaginas());
 			break;
 		case "crearReserva":
-			
+			crearReserva=new CrearReserva();
+			crearReserva.initialize();
 			break;
 		case "modificarReserva":
 			
@@ -63,10 +68,32 @@ public class ReservasController implements ActionListener,MouseListener{
 			
 			break;
 		case "crearReservaVerdadera":
-			
+			if(crearReserva.getTextoFechaDeEntrada().getText().toString()==null||crearReserva.getTextoFechaDeEntrada().getText().toString().equals("")||crearReserva.getTextoFechaDeSalida().getText().toString()==null||crearReserva.getTextoFechaDeSalida().getText().toString().equals("")) {
+				JOptionPane.showMessageDialog(null, "Las fechas no pueden estar vacias");
+			}else if(crearReserva.getElegirNumeroDeAdultos().getValue().toString().equals("0")) {
+				JOptionPane.showMessageDialog(null, "Debe de haber mínimo 1 adulto en la reserva");
+			}else if(crearReserva.getTextoUsuario().getText().toString()==null||crearReserva.getTextoUsuario().getText().toString().equals("")) {
+				JOptionPane.showMessageDialog(null, "Se necesita asociar un usuario a una reserva");
+			}else if(crearReserva.getTextoHabitacion().getText().toString()==null||crearReserva.getTextoHabitacion().getText().toString().equals("")) {
+				JOptionPane.showMessageDialog(null, "Se necesita asociar una habitación a una reserva");
+			}else {
+				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+				try {
+					Date fechaEntrada=(Date)dateFormat.parse(crearReserva.getTextoFechaDeEntrada().getText().toString());
+					Date fechaSalida=(Date)dateFormat.parse(crearReserva.getTextoFechaDeSalida().getText().toString());
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				long miliseconds = System.currentTimeMillis();
+                Date hoy = new Date(miliseconds);
+				//if(fechaEntrada) {
+					
+				//}
+			}
 			break;
 		case "crearReservaCancelada":
-
+			crearReserva.getFrmJungleDreams().setVisible(false);
 			break;
 		case "refrescarReservas":
 			menuPrincipal.construirTablaReservas();

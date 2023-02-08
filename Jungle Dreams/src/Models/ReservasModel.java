@@ -255,22 +255,17 @@ public class ReservasModel {
 	public void buscarReservas(String buscador,String texto) {
 		try {
 			if(buscador.equals("ID Usuario")&&!texto.equals("")) {
-				ReservasModel.numPagina=1;
 				rs=stmt.executeQuery("SELECT * FROM reservas WHERE user_id LIKE \"%"+texto+"%\"");
 			}else if(buscador.equals("De baja")){
 				rs=stmt.executeQuery("SELECT * FROM reservas WHERE fecha_baja IS NOT NULL");
-				ReservasModel.numPagina=1;
 			}else if(buscador.equals("Fecha entrada")){
 				rs=stmt.executeQuery("SELECT * FROM reservas WHERE fecha_entrada LIKE \"%"+texto+"%\"");
-				ReservasModel.numPagina=1;
 			}else if(buscador.equals("Fecha salida")){
 				rs=stmt.executeQuery("SELECT * FROM reservas WHERE fecha_salida LIKE \"%"+texto+"%\"");
-				ReservasModel.numPagina=1;
 			}else {
-				ReservasModel.numPagina=1;
 				rs=stmt.executeQuery("SELECT * FROM reservas WHERE fecha_baja IS NULL");
 			}
-			
+			ReservasModel.numPagina=1;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
