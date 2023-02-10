@@ -176,6 +176,10 @@ public class CrearReserva {
 		panel.add(textoHabitacion);
 		frmJungleDreams.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		reservasController=new ReservasController(this);
+		botonInsertar.setActionCommand("crearReservaVerdadera");
+		botonCancelar.setActionCommand("crearReservaCancelada");
+		botonInsertar.addActionListener(reservasController);
+		botonCancelar.addActionListener(reservasController);
 	}
 
 	public JFrame getFrmJungleDreams() {

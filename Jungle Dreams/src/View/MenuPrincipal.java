@@ -23,9 +23,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
+import Controller.HabitacionesController;
 import Controller.MenuPrincipalController;
 import Controller.ReservasController;
 import Controller.UserController;
+import Models.HabitacionesModel;
 
 import java.awt.Component;
 import java.awt.GridBagLayout;
@@ -62,7 +64,7 @@ public class MenuPrincipal {
 	private JPanel panelToolBarLeft;
 	private JLabel Menu;
 	private JPanel panelToolBarRight;
-	private JLabel masInfo;
+	private JLabel chatMenu;
 	private JPanel panelToolBarCenter;
 	private JLabel hotelLogoMenu;
 	private JPanel panelMenu;
@@ -83,6 +85,7 @@ public class MenuPrincipal {
 	private MenuPrincipalController menuPrincipalController;
 	private UserController userController=new UserController();
 	private ReservasController reservasController=new ReservasController();
+	private HabitacionesController habitacionesController=new HabitacionesController();
 	private JTable table;
 	private JPanel panelUsuariosLeft;
 	private JPanel panelUsuariosRight;
@@ -127,6 +130,27 @@ public class MenuPrincipal {
 	private JButton crearReserva;
 	private JButton modificarReserva;
 	private JButton DarQuitarBajaReservas;
+	private JPanel panelBuscarHabitaciones;
+	private JPanel panelHabitacionesLeft;
+	private JPanel panelInteraccionHabitaciones;
+	private JPanel panelHabitacionesRight;
+	private JTextField textoBuscarHabitaciones;
+	private JButton botonRefrescarHabitaciones;
+	private JComboBox elegirOpcionBuscarHabitaciones;
+	private JButton botonBuscarHabitaciones;
+	private JScrollPane scrollPaneHabitaciones;
+	private JTable tableHabitaciones;
+	private JPanel panelCrearElimiModHabitaciones;
+	private JPanel panelPaginadorHabitaciones;
+	private JPanel panelFondoPaginadorHabitaciones;
+	private JTextField numeroPaginasHabitaciones;
+	private JLabel dobleFlechaRightHabitaciones;
+	private JLabel normalFlechaRightHabitaciones;
+	private JLabel normalFlechaLeftHabitaciones;
+	private JLabel dobleFlechaLeftHabitaciones;
+	private JButton ModificarHabitacion;
+	private JButton CrearHabitacion;
+	private JButton DarQuitarBajaHabitacion;
 	
 	/**
 	 * Create the application.
@@ -170,10 +194,10 @@ public class MenuPrincipal {
 		panelToolBar.add(panelToolBarRight, BorderLayout.EAST);
 		panelToolBarRight.setLayout(new FlowLayout(FlowLayout.CENTER, 7, 7));
 		
-		masInfo = new JLabel("");
-		masInfo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		masInfo.setIcon(new ImageIcon("C:\\Users\\Usuario\\Desktop\\Proyecto Jungle Dreams\\Java\\informacion.png"));
-		panelToolBarRight.add(masInfo);
+		chatMenu = new JLabel("");
+		chatMenu.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		chatMenu.setIcon(new ImageIcon("C:\\Users\\Usuario\\Desktop\\Proyecto Jungle Dreams\\Java\\chat.png"));
+		panelToolBarRight.add(chatMenu);
 		
 		panelToolBarCenter = new JPanel();
 		panelToolBarCenter.setMinimumSize(new Dimension(144, 52));
@@ -452,7 +476,7 @@ public class MenuPrincipal {
 		panelCrearElimiModReservas.add(modificarReserva);
 		
 		DarQuitarBajaReservas = new JButton("Dar/Quitar Baja");
-		DarQuitarBajaReservas.setPreferredSize(new Dimension(145, 45));
+		DarQuitarBajaReservas.setPreferredSize(new Dimension(125, 45));
 		panelCrearElimiModReservas.add(DarQuitarBajaReservas);
 		
 		panelPaginadorReservas = new JPanel();
@@ -550,6 +574,145 @@ public class MenuPrincipal {
 		panelHabitaciones = new JPanel();
 		panelHabitaciones.setBackground(new Color(168, 255, 168));
 		panelTodaInformacionMenu.add(panelHabitaciones, "name_188466359769000");
+		panelHabitaciones.setLayout(new BorderLayout(0, 0));
+		
+		panelBuscarHabitaciones = new JPanel();
+		panelBuscarHabitaciones.setOpaque(false);
+		panelHabitaciones.add(panelBuscarHabitaciones, BorderLayout.NORTH);
+		
+		botonRefrescarHabitaciones = new JButton("Refrescar");
+		panelBuscarHabitaciones.add(botonRefrescarHabitaciones);
+		
+		elegirOpcionBuscarHabitaciones = new JComboBox();
+		elegirOpcionBuscarHabitaciones.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+		elegirOpcionBuscarHabitaciones.setFont(new Font("Trebuchet MS", Font.PLAIN, 12));
+		elegirOpcionBuscarHabitaciones.setBorder(new EmptyBorder(0, 0, 0, 0));
+		elegirOpcionBuscarHabitaciones.setBackground(new Color(255, 255, 255));
+		elegirOpcionBuscarHabitaciones.setModel(new DefaultComboBoxModel(new String[] {"Nombre", "Cantidad", "Precio", "Numero max. de personas", "Numero de camas", "De baja"}));
+		panelBuscarHabitaciones.add(elegirOpcionBuscarHabitaciones);
+		
+		textoBuscarHabitaciones = new JTextField();
+		textoBuscarHabitaciones.setPreferredSize(new Dimension(7, 25));
+		panelBuscarHabitaciones.add(textoBuscarHabitaciones);
+		textoBuscarHabitaciones.setColumns(10);
+		
+		botonBuscarHabitaciones = new JButton("Buscar");
+		panelBuscarHabitaciones.add(botonBuscarHabitaciones);
+		
+		panelHabitacionesLeft = new JPanel();
+		panelHabitacionesLeft.setOpaque(false);
+		panelHabitaciones.add(panelHabitacionesLeft, BorderLayout.WEST);
+		
+		panelInteraccionHabitaciones = new JPanel();
+		panelInteraccionHabitaciones.setOpaque(false);
+		panelHabitaciones.add(panelInteraccionHabitaciones, BorderLayout.SOUTH);
+		panelInteraccionHabitaciones.setLayout(new BorderLayout(0, 0));
+		
+		panelCrearElimiModHabitaciones = new JPanel();
+		panelCrearElimiModHabitaciones.setOpaque(false);
+		panelInteraccionHabitaciones.add(panelCrearElimiModHabitaciones, BorderLayout.NORTH);
+		panelCrearElimiModHabitaciones.setLayout(new FlowLayout(FlowLayout.CENTER, 50, 15));
+		
+		CrearHabitacion = new JButton("Crear Habitaci\u00F3n");
+		CrearHabitacion.setPreferredSize(new Dimension(145, 45));
+		panelCrearElimiModHabitaciones.add(CrearHabitacion);
+		
+		ModificarHabitacion = new JButton("Modificar Habitaci\u00F3n");
+		ModificarHabitacion.setPreferredSize(new Dimension(165, 45));
+		panelCrearElimiModHabitaciones.add(ModificarHabitacion);
+		
+		DarQuitarBajaHabitacion = new JButton("Dar/Quitar Baja");
+		DarQuitarBajaHabitacion.setPreferredSize(new Dimension(125, 45));
+		panelCrearElimiModHabitaciones.add(DarQuitarBajaHabitacion);
+		
+		panelPaginadorHabitaciones = new JPanel();
+		panelPaginadorHabitaciones.setOpaque(false);
+		panelInteraccionHabitaciones.add(panelPaginadorHabitaciones, BorderLayout.SOUTH);
+		
+		panelFondoPaginadorHabitaciones = new JPanel();
+		panelFondoPaginadorHabitaciones.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+		panelFondoPaginadorHabitaciones.setBackground(new Color(39, 160, 51));
+		panelFondoPaginadorHabitaciones.setPreferredSize(new Dimension(550, 75));
+		panelFondoPaginadorHabitaciones.setOpaque(true);
+		panelPaginadorHabitaciones.add(panelFondoPaginadorHabitaciones);
+		
+		dobleFlechaLeftHabitaciones = new JLabel("");
+		dobleFlechaLeftHabitaciones.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		dobleFlechaLeftHabitaciones.setIcon(new ImageIcon("C:\\Users\\Usuario\\Desktop\\Proyecto Jungle Dreams\\Java\\flechas-izquierda.png"));
+		
+		normalFlechaLeftHabitaciones = new JLabel("");
+		normalFlechaLeftHabitaciones.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		normalFlechaLeftHabitaciones.setIcon(new ImageIcon("C:\\Users\\Usuario\\Desktop\\Proyecto Jungle Dreams\\Java\\flecha_izquierda_normal.png"));
+		
+		normalFlechaRightHabitaciones = new JLabel("");
+		normalFlechaRightHabitaciones.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		normalFlechaRightHabitaciones.setIcon(new ImageIcon("C:\\Users\\Usuario\\Desktop\\Proyecto Jungle Dreams\\Java\\flecha_derecha_normal.png"));
+		
+		dobleFlechaRightHabitaciones = new JLabel("");
+		dobleFlechaRightHabitaciones.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		dobleFlechaRightHabitaciones.setIcon(new ImageIcon("C:\\Users\\Usuario\\Desktop\\Proyecto Jungle Dreams\\Java\\flechas-derecha.png"));
+		
+		numeroPaginasHabitaciones = new JTextField();
+		numeroPaginasHabitaciones.setText("1/2");
+		numeroPaginasHabitaciones.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+		numeroPaginasHabitaciones.setEditable(false);
+		numeroPaginasHabitaciones.setHorizontalAlignment(SwingConstants.CENTER);
+		numeroPaginasHabitaciones.setMinimumSize(new Dimension(0, 0));
+		numeroPaginasHabitaciones.setPreferredSize(new Dimension(0, 0));
+		numeroPaginasHabitaciones.setForeground(new Color(0, 128, 0));
+		numeroPaginasHabitaciones.setFont(new Font("Tw Cen MT Condensed", Font.PLAIN, 28));
+		numeroPaginasHabitaciones.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+		numeroPaginasHabitaciones.setColumns(5);
+		numeroPaginasHabitaciones.setCaretColor(Color.WHITE);
+		numeroPaginasHabitaciones.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		numeroPaginasHabitaciones.setColumns(10);
+		GroupLayout gl_panelFondoPaginadorHabitaciones = new GroupLayout(panelFondoPaginadorHabitaciones);
+		gl_panelFondoPaginadorHabitaciones.setHorizontalGroup(
+			gl_panelFondoPaginadorHabitaciones.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panelFondoPaginadorHabitaciones.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(dobleFlechaLeftHabitaciones)
+					.addGap(18)
+					.addComponent(normalFlechaLeftHabitaciones)
+					.addGap(118)
+					.addComponent(numeroPaginasHabitaciones, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, 99, Short.MAX_VALUE)
+					.addComponent(normalFlechaRightHabitaciones)
+					.addGap(18)
+					.addComponent(dobleFlechaRightHabitaciones, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
+		);
+		gl_panelFondoPaginadorHabitaciones.setVerticalGroup(
+			gl_panelFondoPaginadorHabitaciones.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panelFondoPaginadorHabitaciones.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panelFondoPaginadorHabitaciones.createParallelGroup(Alignment.LEADING)
+						.addComponent(normalFlechaRightHabitaciones, GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
+						.addGroup(gl_panelFondoPaginadorHabitaciones.createParallelGroup(Alignment.TRAILING, false)
+							.addComponent(dobleFlechaRightHabitaciones, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(normalFlechaLeftHabitaciones, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(dobleFlechaLeftHabitaciones, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+					.addGap(13))
+				.addGroup(gl_panelFondoPaginadorHabitaciones.createSequentialGroup()
+					.addGap(19)
+					.addComponent(numeroPaginasHabitaciones, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(23, Short.MAX_VALUE))
+		);
+		panelFondoPaginadorHabitaciones.setLayout(gl_panelFondoPaginadorHabitaciones);
+		
+		panelHabitacionesRight = new JPanel();
+		panelHabitacionesRight.setOpaque(false);
+		panelHabitaciones.add(panelHabitacionesRight, BorderLayout.EAST);
+		
+		scrollPaneHabitaciones = new JScrollPane();
+		scrollPaneHabitaciones.setOpaque(false);
+		scrollPaneHabitaciones.setForeground(new Color(0, 255, 0));
+		scrollPaneHabitaciones.setBackground(new Color(0, 255, 0));
+		scrollPaneHabitaciones.setBorder(null);
+		scrollPaneHabitaciones.setMinimumSize(new Dimension(230, 230));
+		scrollPaneHabitaciones.setBorder(BorderFactory.createEmptyBorder());
+		scrollPaneHabitaciones.getViewport().setBackground(new Color(168, 255, 168));
+		panelHabitaciones.add(scrollPaneHabitaciones, BorderLayout.CENTER);
 		
 		menuPrincipalController=new MenuPrincipalController(this);
 		userController=new UserController(this);
@@ -574,8 +737,8 @@ public class MenuPrincipal {
 		modificarUsuario.setPreferredSize(new Dimension(145, 45));
 		panelCrearElimiModUsuarios.add(modificarUsuario);
 		
-		DarQuitarBajaUsuario = new JButton("Dar/Quitar baja");
-		DarQuitarBajaUsuario.setPreferredSize(new Dimension(145, 45));
+		DarQuitarBajaUsuario = new JButton("Dar/Quitar Baja");
+		DarQuitarBajaUsuario.setPreferredSize(new Dimension(125, 45));
 		panelCrearElimiModUsuarios.add(DarQuitarBajaUsuario);
 		
 		panelPaginadorUsuarios = new JPanel();
@@ -652,7 +815,7 @@ public class MenuPrincipal {
 		
 		panelFondoPaginador.setLayout(gl_panelFondoPaginador);
 		
-		
+		habitacionesController=new HabitacionesController(this);
 		
 		
 		
@@ -681,6 +844,11 @@ public class MenuPrincipal {
 		crearReserva.setActionCommand("crearReserva");
 		modificarReserva.setActionCommand("modificarReserva");
 		DarQuitarBajaReservas.setActionCommand("DarQuitarBajaReserva");
+		botonBuscarHabitaciones.setActionCommand("buscarHabitaciones");
+		botonRefrescarHabitaciones.setActionCommand("refrescarHabitaciones");
+		CrearHabitacion.setActionCommand("crearHabitacion");
+		ModificarHabitacion.setActionCommand("modificarHabitacion");
+		DarQuitarBajaHabitacion.setActionCommand("DarQuitarBajaHabitacion");
 		crearUsuario.addActionListener(userController);
 		modificarUsuario.addActionListener(userController);
 		DarQuitarBajaUsuario.addActionListener(userController);
@@ -694,9 +862,20 @@ public class MenuPrincipal {
 		crearReserva.addActionListener(reservasController);
 		modificarReserva.addActionListener(reservasController);
 		DarQuitarBajaReservas.addActionListener(reservasController);
+		chatMenu.addMouseListener(menuPrincipalController);
+		botonBuscarHabitaciones.addActionListener(habitacionesController);
+		botonRefrescarHabitaciones.addActionListener(habitacionesController);
+		CrearHabitacion.addActionListener(habitacionesController);
+		ModificarHabitacion.addActionListener(habitacionesController);
+		DarQuitarBajaHabitacion.addActionListener(habitacionesController);
+		dobleFlechaLeftHabitaciones.addMouseListener(habitacionesController);
+		dobleFlechaRightHabitaciones.addMouseListener(habitacionesController);
+		normalFlechaLeftHabitaciones.addMouseListener(habitacionesController);
+		normalFlechaRightHabitaciones.addMouseListener(habitacionesController);
 		
 		construirTabla();
 		construirTablaReservas();
+		construirTablaHabitaciones();
 	}
 
 	public JFrame getFrmJungleDreams() {
@@ -755,12 +934,12 @@ public class MenuPrincipal {
 		Menu = menu;
 	}
 
-	public JLabel getMasInfo() {
-		return masInfo;
+	public JLabel getChatMenu() {
+		return chatMenu;
 	}
 
-	public void setMasInfo(JLabel masInfo) {
-		this.masInfo = masInfo;
+	public void setChatMenu(JLabel masInfo) {
+		this.chatMenu = masInfo;
 	}
 
 
@@ -1259,6 +1438,206 @@ public class MenuPrincipal {
 	public void setDobleFlechaRightReservas(JLabel dobleFlechaRightReservas) {
 		this.dobleFlechaRightReservas = dobleFlechaRightReservas;
 	}
+	
+	public HabitacionesController getHabitacionesController() {
+		return habitacionesController;
+	}
+
+	public void setHabitacionesController(HabitacionesController habitacionesController) {
+		this.habitacionesController = habitacionesController;
+	}
+
+	public JButton getCrearReserva() {
+		return crearReserva;
+	}
+
+	public void setCrearReserva(JButton crearReserva) {
+		this.crearReserva = crearReserva;
+	}
+
+	public JButton getModificarReserva() {
+		return modificarReserva;
+	}
+
+	public void setModificarReserva(JButton modificarReserva) {
+		this.modificarReserva = modificarReserva;
+	}
+
+	public JButton getDarQuitarBajaReservas() {
+		return DarQuitarBajaReservas;
+	}
+
+	public void setDarQuitarBajaReservas(JButton darQuitarBajaReservas) {
+		DarQuitarBajaReservas = darQuitarBajaReservas;
+	}
+
+	public JPanel getPanelBuscarHabitaciones() {
+		return panelBuscarHabitaciones;
+	}
+
+	public void setPanelBuscarHabitaciones(JPanel panelBuscarHabitaciones) {
+		this.panelBuscarHabitaciones = panelBuscarHabitaciones;
+	}
+
+	public JPanel getPanelHabitacionesLeft() {
+		return panelHabitacionesLeft;
+	}
+
+	public void setPanelHabitacionesLeft(JPanel panelHabitacionesLeft) {
+		this.panelHabitacionesLeft = panelHabitacionesLeft;
+	}
+
+	public JPanel getPanelInteraccionHabitaciones() {
+		return panelInteraccionHabitaciones;
+	}
+
+	public void setPanelInteraccionHabitaciones(JPanel panelInteraccionHabitaciones) {
+		this.panelInteraccionHabitaciones = panelInteraccionHabitaciones;
+	}
+
+	public JPanel getPanelHabitacionesRight() {
+		return panelHabitacionesRight;
+	}
+
+	public void setPanelHabitacionesRight(JPanel panelHabitacionesRight) {
+		this.panelHabitacionesRight = panelHabitacionesRight;
+	}
+
+	public JTextField getTextoBuscarHabitaciones() {
+		return textoBuscarHabitaciones;
+	}
+
+	public void setTextoBuscarHabitaciones(JTextField textoBuscarHabitaciones) {
+		this.textoBuscarHabitaciones = textoBuscarHabitaciones;
+	}
+
+	public JButton getBotonRefrescarHabitaciones() {
+		return botonRefrescarHabitaciones;
+	}
+
+	public void setBotonRefrescarHabitaciones(JButton botonRefrescarHabitaciones) {
+		this.botonRefrescarHabitaciones = botonRefrescarHabitaciones;
+	}
+
+	public JComboBox getElegirOpcionBuscarHabitaciones() {
+		return elegirOpcionBuscarHabitaciones;
+	}
+
+	public void setElegirOpcionBuscarHabitaciones(JComboBox elegirOpcionBuscarHabitaciones) {
+		this.elegirOpcionBuscarHabitaciones = elegirOpcionBuscarHabitaciones;
+	}
+
+	public JButton getBotonBuscarHabitaciones() {
+		return botonBuscarHabitaciones;
+	}
+
+	public void setBotonBuscarHabitaciones(JButton botonBuscarHabitaciones) {
+		this.botonBuscarHabitaciones = botonBuscarHabitaciones;
+	}
+
+	public JScrollPane getScrollPaneHabitaciones() {
+		return scrollPaneHabitaciones;
+	}
+
+	public void setScrollPaneHabitaciones(JScrollPane scrollPaneHabitaciones) {
+		this.scrollPaneHabitaciones = scrollPaneHabitaciones;
+	}
+
+	public JTable getTableHabitaciones() {
+		return tableHabitaciones;
+	}
+
+	public void setTableHabitaciones(JTable tableHabitaciones) {
+		this.tableHabitaciones = tableHabitaciones;
+	}
+
+	public JPanel getPanelCrearElimiModHabitaciones() {
+		return panelCrearElimiModHabitaciones;
+	}
+
+	public void setPanelCrearElimiModHabitaciones(JPanel panelCrearElimiModHabitaciones) {
+		this.panelCrearElimiModHabitaciones = panelCrearElimiModHabitaciones;
+	}
+
+	public JPanel getPanelPaginadorHabitaciones() {
+		return panelPaginadorHabitaciones;
+	}
+
+	public void setPanelPaginadorHabitaciones(JPanel panelPaginadorHabitaciones) {
+		this.panelPaginadorHabitaciones = panelPaginadorHabitaciones;
+	}
+
+	public JPanel getPanelFondoPaginadorHabitaciones() {
+		return panelFondoPaginadorHabitaciones;
+	}
+
+	public void setPanelFondoPaginadorHabitaciones(JPanel panelFondoPaginadorHabitaciones) {
+		this.panelFondoPaginadorHabitaciones = panelFondoPaginadorHabitaciones;
+	}
+
+	public JTextField getNumeroPaginasHabitaciones() {
+		return numeroPaginasHabitaciones;
+	}
+
+	public void setNumeroPaginasHabitaciones(JTextField numeroPaginasHabitaciones) {
+		this.numeroPaginasHabitaciones = numeroPaginasHabitaciones;
+	}
+
+	public JLabel getDobleFlechaRightHabitaciones() {
+		return dobleFlechaRightHabitaciones;
+	}
+
+	public void setDobleFlechaRightHabitaciones(JLabel dobleFlechaRightHabitaciones) {
+		this.dobleFlechaRightHabitaciones = dobleFlechaRightHabitaciones;
+	}
+
+	public JLabel getNormalFlechaRightHabitaciones() {
+		return normalFlechaRightHabitaciones;
+	}
+
+	public void setNormalFlechaRightHabitaciones(JLabel normalFlechaRightHabitaciones) {
+		this.normalFlechaRightHabitaciones = normalFlechaRightHabitaciones;
+	}
+
+	public JLabel getNormalFlechaLeftHabitaciones() {
+		return normalFlechaLeftHabitaciones;
+	}
+
+	public void setNormalFlechaLeftHabitaciones(JLabel normalFlechaLeftHabitaciones) {
+		this.normalFlechaLeftHabitaciones = normalFlechaLeftHabitaciones;
+	}
+
+	public JLabel getDobleFlechaLeftHabitaciones() {
+		return dobleFlechaLeftHabitaciones;
+	}
+
+	public void setDobleFlechaLeftHabitaciones(JLabel dobleFlechaLeftHabitaciones) {
+		this.dobleFlechaLeftHabitaciones = dobleFlechaLeftHabitaciones;
+	}
+
+	public JButton getModificarHabitacion() {
+		return ModificarHabitacion;
+	}
+
+	public void setModificarHabitacion(JButton modificarHabitacion) {
+		ModificarHabitacion = modificarHabitacion;
+	}
+
+	public JButton getCrearHabitacion() {
+		return CrearHabitacion;
+	}
+
+	public void setCrearHabitacion(JButton crearHabitacion) {
+		CrearHabitacion = crearHabitacion;
+	}
+
+	public JButton getDarQuitarBajaHabitacion() {
+		return DarQuitarBajaHabitacion;
+	}
+
+	public void setDarQuitarBajaHabitacion(JButton darQuitarBajaHabitacion) {
+		DarQuitarBajaHabitacion = darQuitarBajaHabitacion;
+	}
 
 	public void construirTabla() {
 		String titulos[]={"Email","Password","Token","Fecha de validez del token","Nombre","Apellidos","Teléfono","Fecha de baja","Fecha de creación","Fecha de modificación"};
@@ -1291,5 +1670,21 @@ public class MenuPrincipal {
 		tableReservas.addMouseListener(reservasController);
 		numeroPaginaReservas.setText(reservasController.ponerPaginas());
 		scrollPaneReservas.setViewportView(tableReservas);
+	}
+	
+	public void construirTablaHabitaciones() {
+		String titulos[]={"ID","Nombre","Descripcion","Cantidad","Precio","Numero max. de personas","Numero de camas","Fecha de baja","Fecha de creación","Fecha de modificación"};
+		String informacion[][]=habitacionesController.obtenerMatriz();
+		
+		tableHabitaciones = new JTable(informacion,titulos);
+		tableHabitaciones.setDefaultEditor(Object.class, null);
+		tableHabitaciones.setSelectionBackground(new Color(196, 245, 141));
+		tableHabitaciones.setFont(new Font("Trebuchet MS", Font.BOLD, 10));
+		tableHabitaciones.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+		tableHabitaciones.setBorder(null);
+		tableHabitaciones.setBackground(new Color(255, 255, 255));
+		tableHabitaciones.setOpaque(false);
+		numeroPaginasHabitaciones.setText(habitacionesController.ponerPaginas());
+		scrollPaneHabitaciones.setViewportView(tableHabitaciones);
 	}
 }

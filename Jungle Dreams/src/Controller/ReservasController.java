@@ -4,13 +4,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.JOptionPane;
 
+import Models.HabitacionesModel;
 import Models.ReservasHabitacionesModel;
 import Models.ReservasModel;
 import Models.UserModel;
@@ -23,9 +24,12 @@ import View.VerReservaHabitación;
 public class ReservasController implements ActionListener,MouseListener{
 	ReservasModel reservasModel=new ReservasModel();
 	ReservasHabitacionesModel reservasHabitacionesModel=new ReservasHabitacionesModel(); 
+	HabitacionesModel habitacionesModel=new HabitacionesModel();
 	MenuPrincipal menuPrincipal;
 	VerReservaHabitación verReservaHabitación;
 	CrearReserva crearReserva;
+	int respuesta=1;
+	String idReserva="1";
 	//ModificarReserva modificarReserva;
 	public ReservasController(){}
 	public ReservasController(MenuPrincipal menuprincipal) {
@@ -81,15 +85,34 @@ public class ReservasController implements ActionListener,MouseListener{
 				try {
 					Date fechaEntrada=(Date)dateFormat.parse(crearReserva.getTextoFechaDeEntrada().getText().toString());
 					Date fechaSalida=(Date)dateFormat.parse(crearReserva.getTextoFechaDeSalida().getText().toString());
+					long miliseconds = System.currentTimeMillis();
+	                Date hoy = new Date(miliseconds);
+	                if(fechaEntrada.after(fechaSalida)||fechaEntrada.before(hoy)) {
+	                	JOptionPane.showMessageDialog(null, "Las fechas no concuerdan");
+					}else {
+						if(respuesta==1) {
+							reservasModel.crearReserva(crearReserva.getTextoFechaDeEntrada().getText().toString(), crearReserva.getTextoFechaDeSalida().getText().toString(), crearReserva.getElegirNumeroDeAdultos().getValue().toString(), crearReserva.getElegirNumeroDeNinyos().getValue().toString(), crearReserva.getTextoUsuario().getText().toString());
+							idReserva=reservasModel.devolverUltimaReserva();
+						}
+						
+						String precioHabitacion=habitacionesModel.getHabitacionPrecio(crearReserva.getTextoHabitacion().getText().toString());
+						reservasHabitacionesModel.crearReservasHabitaciones(crearReserva.getTextoHabitacion().getText().toString(), idReserva, "1", precioHabitacion);
+						crearReserva.getTextoFechaDeEntrada().setEnabled(false);
+						crearReserva.getTextoFechaDeSalida().setEnabled(false);
+						crearReserva.getElegirNumeroDeAdultos().setEnabled(false);
+						crearReserva.getElegirNumeroDeNinyos().setEnabled(false);
+						crearReserva.getTextoUsuario().setEnabled(false);
+						respuesta=JOptionPane.showConfirmDialog(null, "¿Desea agregar otra habitación?","", JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE);
+						
+						if(respuesta==1) {
+							crearReserva.getFrmJungleDreams().setVisible(false);
+						}
+					}
 				} catch (ParseException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				long miliseconds = System.currentTimeMillis();
-                Date hoy = new Date(miliseconds);
-				//if(fechaEntrada) {
-					
-				//}
+				
+				
 			}
 			break;
 		case "crearReservaCancelada":
@@ -98,6 +121,7 @@ public class ReservasController implements ActionListener,MouseListener{
 		case "refrescarReservas":
 			menuPrincipal.construirTablaReservas();
 			menuPrincipal.getTextoBuscarReservas().setText("");
+			menuPrincipal.getNumeroPaginaReservas().setText(ponerPaginas());
 			break;
 		default:
 			System.out.println("ERROR EN LA ACCIÓN");

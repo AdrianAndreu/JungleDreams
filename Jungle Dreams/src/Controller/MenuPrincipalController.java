@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import View.ChatView;
 import View.Login;
 import View.MenuPrincipal;
 
@@ -50,7 +51,9 @@ public class MenuPrincipalController implements MouseListener,ActionListener{
 		}else if(e.getSource()==menuPrincipal.getFotoCerrarSesion()||e.getSource()==menuPrincipal.getTextoCerrarSesion()) {
 			menuPrincipal.getFrmJungleDreams().setVisible(false);
 			Login login=new Login();
-			
+		}else if(e.getSource()==menuPrincipal.getChatMenu()) {
+			ChatView chatView=new ChatView();
+			chatView.initialize();
 		}
 	}
 		

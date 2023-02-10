@@ -83,7 +83,7 @@ public class VerReservaHabitación {
 	}
 	
 	public void construirTablaReservas() {
-		String titulos[]={"ID","Habitacion ID","Reserva ID","Cantidad","Precio","Numero de niños","Fecha de creación","Fecha de modificación"};
+		String titulos[]={"ID","Habitacion ID","Reserva ID","Cantidad","Precio","Fecha de creación","Fecha de modificación"};
 		String informacion[][]=reservasController.obtenerMatrizReservasHabitacion();
 		
 		table = new JTable(informacion,titulos);

@@ -133,6 +133,7 @@ public class UserController implements ActionListener,MouseListener{
 			case "refrescarUsuarios":
 				menuPrincipal.construirTabla();
 				menuPrincipal.getTextoBuscarUsuarios().setText("");
+				menuPrincipal.getNumeroPagina().setText(ponerPaginas());
 				break;
 			default:
 				System.out.println("ERROR EN LA ACCIÓN");
@@ -159,6 +160,7 @@ public class UserController implements ActionListener,MouseListener{
 		}
 		return matrizInfo;
 	}
+	
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if(e.getSource()==menuPrincipal.getDobleFlechaLeft()) {

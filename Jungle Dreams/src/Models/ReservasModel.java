@@ -208,6 +208,18 @@ public class ReservasModel {
 		return guardarDatos;
 	}
 	
+	public String devolverUltimaReserva() {
+		String idReserva="1";
+		try {
+			rs=stmt.executeQuery("SELECT * FROM reservas");
+			rs.last();
+			idReserva=rs.getString("id");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return idReserva;
+	}
+	
 	public void modificarReservasConfirmar(String fecha_entrada, String fecha_salida, String numero_adultos, String numero_ninyos) {
 		try {
 			rs.absolute(quedarse);

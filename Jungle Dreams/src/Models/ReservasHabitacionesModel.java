@@ -3,6 +3,7 @@ package Models;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import Database.DBSingleton;
@@ -121,6 +122,40 @@ public class ReservasHabitacionesModel {
 
 	public static void setIdReserva(int idReserva) {
 		ReservasHabitacionesModel.idReserva = idReserva;
+	}
+	
+	public void crearReservasHabitaciones(String habitacion_id, String reserva_id, String cantidad, String precio) {
+		int idHabitacion=Integer.parseInt(habitacion_id);
+		int idReserva=Integer.parseInt(reserva_id);
+		String comprobante=null;
+		try {
+			rs=stmt.executeQuery("SELECT * FROM reservas_habitaciones WHERE reserva_id="+idReserva+" AND habitacion_id="+idHabitacion+"");
+			if(rs.next()) {
+				comprobante=rs.getString("id");
+			}
+			if(comprobante==null) {
+				rs.moveToInsertRow();
+				rs.updateString("habitacion_id", habitacion_id);
+				rs.updateString("reserva_id", reserva_id);
+				rs.updateString("cantidad", cantidad);
+				rs.updateString("precio", precio);
+				rs.updateString("created_at", LocalDateTime.now().toString());
+				rs.insertRow();
+				rs.beforeFirst();
+			}else {
+				rs.beforeFirst();
+				rs.next();
+				int cant=Integer.parseInt(rs.getString("cantidad"));
+				double prec=Double.parseDouble(rs.getString("precio"));
+				prec+=Double.parseDouble(precio);
+				cant++;
+				rs.updateString("cantidad", String.valueOf(cant));
+				rs.updateString("precio", String.valueOf(prec));
+				rs.updateRow();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public ArrayList<ReservasHabitacionesModel> arrayListReservas(){
