@@ -186,23 +186,8 @@ public class HabitacionesModel {
 	public void modificarUsuariosConfirmar(String nombre,String descripcion,String cantidad,String precio,String numero_maximo_personas,String numero_camas) {
 		try {
 			rs.absolute(quedarse);
-			if(nombre.equals("")||nombre==null) {
-				nombre=null;
-			}
 			if(descripcion.equals("")||descripcion==null) {
 				descripcion=null;
-			}
-			if(cantidad.equals("")||cantidad==null) {
-				cantidad=null;
-			}
-			if(precio.equals("")||precio==null) {
-				precio=null;
-			}
-			if(numero_maximo_personas.equals("")||numero_maximo_personas==null) {
-				numero_maximo_personas=null;
-			}
-			if(numero_camas.equals("")||numero_camas==null) {
-				numero_camas=null;
 			}
 			rs.updateString("nombre", nombre);
 			rs.updateString("descripcion", descripcion);

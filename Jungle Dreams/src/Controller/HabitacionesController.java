@@ -17,12 +17,14 @@ import Models.UserModel;
 import View.CrearHabitacion;
 import View.CrearUsuario;
 import View.MenuPrincipal;
+import View.ModificarHabitacion;
 import View.ModificarUsuario;
 
 public class HabitacionesController implements ActionListener,MouseListener{
 	HabitacionesModel habitacionesModel=new HabitacionesModel();
 	MenuPrincipal menuPrincipal;
 	CrearHabitacion crearHabitacion;
+	ModificarHabitacion modificarHabitacion;
 	
 	public HabitacionesController(MenuPrincipal menuPrincipal) {
 		this.menuPrincipal=menuPrincipal;
@@ -30,6 +32,9 @@ public class HabitacionesController implements ActionListener,MouseListener{
 	public HabitacionesController() {}
 	public HabitacionesController(CrearHabitacion crearHabitacion) {
 		this.crearHabitacion=crearHabitacion;
+	}
+	public HabitacionesController(ModificarHabitacion modificarHabitacion) {
+		this.modificarHabitacion=modificarHabitacion;
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -44,17 +49,51 @@ public class HabitacionesController implements ActionListener,MouseListener{
 			crearHabitacion.initialize();
 			break;
 		case "modificarHabitacion":
-			
+			if(menuPrincipal.getTableHabitaciones().getSelectedRow()>=0) {
+				ArrayList<String> datosFila=new ArrayList<>();
+				modificarHabitacion=new ModificarHabitacion();
+				modificarHabitacion.initialize();
+				
+				datosFila=habitacionesModel.modificarHabitacionesMandar(menuPrincipal.getTableHabitaciones().getSelectedRow()+(HabitacionesModel.getNumRegistroPagina()*(HabitacionesModel.getNumPagina()-1)));
+				modificarHabitacion.getTextoNombre().setText(datosFila.get(0));
+				modificarHabitacion.getTextoDescripcion().setText(datosFila.get(1));
+				modificarHabitacion.getTextoCantidad().setText(datosFila.get(2));
+				modificarHabitacion.getTextoPrecio().setText(datosFila.get(3));
+				modificarHabitacion.getTextoNMaxP().setText(datosFila.get(4));
+				modificarHabitacion.getTextoNCamas().setText(datosFila.get(5));
+			}
 			break;
 		case "DarQuitarBajaHabitacion":
 			habitacionesModel.DarQuitarBajaHabitacion(menuPrincipal.getTableHabitaciones().getSelectedRow()+(HabitacionesModel.getNumRegistroPagina()*(HabitacionesModel.getNumPagina()-1)));
 			menuPrincipal.construirTablaHabitaciones();
 			break;
 		case "modificarHabitacionVerdadero":
-			
+			if(modificarHabitacion.getTextoNombre().getText().toString()==null||modificarHabitacion.getTextoNombre().getText().toString().equals("")) {
+				JOptionPane.showMessageDialog(null, "La habitación debe de tener un nombre");
+			}else if(modificarHabitacion.getTextoPrecio().getText().toString()==null||modificarHabitacion.getTextoPrecio().getText().toString().equals("")) {
+				JOptionPane.showMessageDialog(null, "La habitación debe de tener un precio");
+			}else if(modificarHabitacion.getTextoCantidad().getText().toString()==null||modificarHabitacion.getTextoCantidad().getText().toString().equals("")) {
+				JOptionPane.showMessageDialog(null, "Debe de poner la cantidad de habitaciones de la que el hotel dispone");
+			}else if(modificarHabitacion.getTextoNMaxP().getText().toString()==null||modificarHabitacion.getTextoNMaxP().getText().toString().equals("")) {
+				JOptionPane.showMessageDialog(null, "La habitación debe de tener un numero máximo de personas preestablecido");
+			}else if(modificarHabitacion.getTextoNCamas().getText().toString()==null||modificarHabitacion.getTextoNCamas().getText().toString().equals("")) {
+				JOptionPane.showMessageDialog(null, "La habitación debe de tener un numero de camas preestablecido");
+			}else {
+				try {
+					Integer.parseInt(modificarHabitacion.getTextoCantidad().getText().toString());
+					Integer.parseInt(modificarHabitacion.getTextoNCamas().getText().toString());
+					Integer.parseInt(modificarHabitacion.getTextoNMaxP().getText().toString());
+					Double.parseDouble(modificarHabitacion.getTextoPrecio().getText().toString());
+					
+					habitacionesModel.modificarUsuariosConfirmar(modificarHabitacion.getTextoNombre().getText().toString(), modificarHabitacion.getTextoDescripcion().getText().toString(), modificarHabitacion.getTextoCantidad().getText().toString(), modificarHabitacion.getTextoPrecio().getText().toString(), modificarHabitacion.getTextoNMaxP().getText().toString(), modificarHabitacion.getTextoNCamas().getText().toString());
+					modificarHabitacion.getFrmJungleDreams().setVisible(false);
+				}catch(NumberFormatException ex) {
+					JOptionPane.showMessageDialog(null, "El formato del precio, de la cantidad, de las camas o del numero máximo de personas es incorrecto, deben ser carácteres numericos. (ej: 60)");
+				}
+			}
 			break;
 		case "modificarHabitacionCancelado":
-			
+			modificarHabitacion.getFrmJungleDreams().setVisible(false);
 			break;
 		case "crearHabitacionVerdadero":
 			if(crearHabitacion.getTextoNombre().getText().toString()==null||crearHabitacion.getTextoNombre().getText().toString().equals("")) {
