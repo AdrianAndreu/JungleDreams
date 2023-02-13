@@ -14,6 +14,7 @@ import org.json.JSONObject;
 
 import Models.HabitacionesModel;
 import Models.UserModel;
+import View.CrearHabitacion;
 import View.CrearUsuario;
 import View.MenuPrincipal;
 import View.ModificarUsuario;
@@ -21,12 +22,15 @@ import View.ModificarUsuario;
 public class HabitacionesController implements ActionListener,MouseListener{
 	HabitacionesModel habitacionesModel=new HabitacionesModel();
 	MenuPrincipal menuPrincipal;
+	CrearHabitacion crearHabitacion;
 	
 	public HabitacionesController(MenuPrincipal menuPrincipal) {
 		this.menuPrincipal=menuPrincipal;
 	}
 	public HabitacionesController() {}
-	
+	public HabitacionesController(CrearHabitacion crearHabitacion) {
+		this.crearHabitacion=crearHabitacion;
+	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
@@ -36,7 +40,8 @@ public class HabitacionesController implements ActionListener,MouseListener{
 			menuPrincipal.getNumeroPaginasHabitaciones().setText(ponerPaginas());
 			break;
 		case "crearHabitacion":
-			
+			crearHabitacion=new CrearHabitacion();
+			crearHabitacion.initialize();
 			break;
 		case "modificarHabitacion":
 			
@@ -52,10 +57,32 @@ public class HabitacionesController implements ActionListener,MouseListener{
 			
 			break;
 		case "crearHabitacionVerdadero":
-			
+			if(crearHabitacion.getTextoNombre().getText().toString()==null||crearHabitacion.getTextoNombre().getText().toString().equals("")) {
+				JOptionPane.showMessageDialog(null, "La habitación debe de tener un nombre");
+			}else if(crearHabitacion.getTextoPrecio().getText().toString()==null||crearHabitacion.getTextoPrecio().getText().toString().equals("")) {
+				JOptionPane.showMessageDialog(null, "La habitación debe de tener un precio");
+			}else if(crearHabitacion.getTextoCantidad().getText().toString()==null||crearHabitacion.getTextoCantidad().getText().toString().equals("")) {
+				JOptionPane.showMessageDialog(null, "Debe de poner la cantidad de habitaciones de la que el hotel dispone");
+			}else if(crearHabitacion.getTextoNMaxP().getText().toString()==null||crearHabitacion.getTextoNMaxP().getText().toString().equals("")) {
+				JOptionPane.showMessageDialog(null, "La habitación debe de tener un numero máximo de personas preestablecido");
+			}else if(crearHabitacion.getTextoNCamas().getText().toString()==null||crearHabitacion.getTextoNCamas().getText().toString().equals("")) {
+				JOptionPane.showMessageDialog(null, "La habitación debe de tener un numero de camas preestablecido");
+			}else {
+				try {
+					Integer.parseInt(crearHabitacion.getTextoCantidad().getText().toString());
+					Integer.parseInt(crearHabitacion.getTextoNCamas().getText().toString());
+					Integer.parseInt(crearHabitacion.getTextoNMaxP().getText().toString());
+					Double.parseDouble(crearHabitacion.getTextoPrecio().getText().toString());
+					
+					habitacionesModel.crearHabitacion(crearHabitacion.getTextoNombre().getText().toString(), crearHabitacion.getTextoDescripcion().getText().toString(), crearHabitacion.getTextoCantidad().getText().toString(), crearHabitacion.getTextoPrecio().getText().toString(), crearHabitacion.getTextoNMaxP().getText().toString(), crearHabitacion.getTextoNCamas().getText().toString());
+					crearHabitacion.getFrmJungleDreams().setVisible(false);
+				}catch(NumberFormatException ex) {
+					JOptionPane.showMessageDialog(null, "El formato del precio, de la cantidad, de las camas o del numero máximo de personas es incorrecto, deben ser carácteres numericos. (ej: 60)");
+				}
+			}
 			break;
 		case "crearHabitacionCancelado":
-
+				crearHabitacion.getFrmJungleDreams().setVisible(false);
 			break;
 		case "refrescarHabitaciones":
 			menuPrincipal.construirTablaHabitaciones();
