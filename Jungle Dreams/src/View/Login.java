@@ -61,7 +61,7 @@ public class Login {
 		password = new JPasswordField();
 		password.setBorder(null);
 		password.setOpaque(false);
-		password.setText("1234");
+		password.setText("");
 		password.setBounds(393, 311, 186, 52);
 		frmJungleDreams.getContentPane().add(password);
 		password.setColumns(10);
@@ -82,7 +82,7 @@ public class Login {
 		email.setToolTipText("");
 		email.setOpaque(false);
 		email.setBounds(393, 219, 186, 52);
-		email.setText("j@j.com");
+		email.setText("");
 		frmJungleDreams.getContentPane().add(email);
 		email.setColumns(10);
 		BLogin.setBounds(333, 414, 246, 37);
