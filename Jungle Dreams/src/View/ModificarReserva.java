@@ -18,6 +18,7 @@ import org.jdatepicker.JDatePicker;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 import Controller.ReservasController;
+import java.awt.event.ActionListener;
 
 public class ModificarReserva {
 
@@ -31,12 +32,10 @@ public class ModificarReserva {
 	private JDatePicker textoFechaDeEntrada;
 	private JDatePicker textoFechaDeSalida;
 	private JComboBox textoUsuario;
-	private JTextField Habitacion;
-	private JComboBox textoHabitacion;
 	private JSpinner elegirNumeroDeAdultos;
 	private JSpinner elegirNumeroDeNinyos;
-	private JButton botonInsertar;
-	private JButton botonCancelar;
+	private JButton botonModificarHabitacion;
+	private JButton botonCancelarHabitacion;
 	private ReservasController reservasController;
 
 	/**
@@ -48,6 +47,7 @@ public class ModificarReserva {
 
 	/**
 	 * Initialize the contents of the frame.
+	 * @wbp.parser.entryPoint
 	 */
 	public void initialize() {
 		frmJungleDreams = new JFrame();
@@ -55,12 +55,12 @@ public class ModificarReserva {
 		frmJungleDreams.setTitle("JUNGLE DREAMS");
 		frmJungleDreams.setVisible(true);
 		frmJungleDreams.setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Usuario\\Desktop\\Proyecto Jungle Dreams\\Java\\J.PNG"));
-		frmJungleDreams.setBounds(100, 100, 550, 403);
+		frmJungleDreams.setBounds(0, 0, 551, 350);
 		frmJungleDreams.setResizable(false);
 		frmJungleDreams.getContentPane().setLayout(null);
 		
 		panel = new JPanel();
-		panel.setBounds(0, 0, 536, 366);
+		panel.setBounds(0, 0, 537, 313);
 		panel.setBackground(new Color(168, 255, 168));
 		frmJungleDreams.getContentPane().add(panel);
 		panel.setLayout(null);
@@ -145,44 +145,154 @@ public class ModificarReserva {
 		textoUsuario.setBounds(273, 209, 151, 19);
 		panel.add(textoUsuario);
 		
-		Habitacion = new JTextField();
-		Habitacion.setText("Habitaci\u00F3n:");
-		Habitacion.setOpaque(false);
-		Habitacion.setHorizontalAlignment(SwingConstants.RIGHT);
-		Habitacion.setFont(new Font("Tahoma", Font.BOLD, 14));
-		Habitacion.setEditable(false);
-		Habitacion.setColumns(10);
-		Habitacion.setBorder(null);
-		Habitacion.setBounds(167, 249, 96, 19);
-		panel.add(Habitacion);
+		botonModificarHabitacion = new JButton("Modificar");
+		botonModificarHabitacion.setFont(new Font("Tahoma", Font.BOLD, 14));
+		botonModificarHabitacion.setActionCommand("crearUsuarioVerdadero");
+		botonModificarHabitacion.setBounds(112, 255, 114, 37);
+		panel.add(botonModificarHabitacion);
 		
-		botonInsertar = new JButton("Insertar");
-		botonInsertar.setFont(new Font("Tahoma", Font.BOLD, 14));
-		botonInsertar.setActionCommand("crearUsuarioVerdadero");
-		botonInsertar.setBounds(112, 302, 114, 37);
-		panel.add(botonInsertar);
-		
-		botonCancelar = new JButton("Cancelar");
-		botonCancelar.setFont(new Font("Tahoma", Font.BOLD, 14));
-		botonCancelar.setActionCommand("crearUsuarioVerdadero");
-		botonCancelar.setBounds(319, 302, 114, 37);
-		panel.add(botonCancelar);
-		
-		textoHabitacion = new JComboBox();
-		textoHabitacion.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		textoHabitacion.setBounds(273, 251, 151, 19);
-		panel.add(textoHabitacion);
+		botonCancelarHabitacion = new JButton("Cancelar");
+		botonCancelarHabitacion.setFont(new Font("Tahoma", Font.BOLD, 14));
+		botonCancelarHabitacion.setActionCommand("crearUsuarioVerdadero");
+		botonCancelarHabitacion.setBounds(310, 255, 114, 37);
+		panel.add(botonCancelarHabitacion);
 		frmJungleDreams.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		reservasController=new ReservasController(this);
-		botonInsertar.setActionCommand("crearReservaVerdadera");
-		botonCancelar.setActionCommand("crearReservaCancelada");
-		botonInsertar.addActionListener(reservasController);
-		botonCancelar.addActionListener(reservasController);
+		
+		botonModificarHabitacion.setActionCommand("modificarReservaVerdadera");
+		botonCancelarHabitacion.setActionCommand("modificarReservaCancelada");
+		botonModificarHabitacion.addActionListener(reservasController);
+		botonCancelarHabitacion.addActionListener(reservasController);
 		
 		AutoCompleteDecorator.decorate(textoUsuario);
-		AutoCompleteDecorator.decorate(textoHabitacion);
-		
-		reservasController.fillDesplegablesReservas();
 	}
 
+	public JFrame getFrmJungleDreams() {
+		return frmJungleDreams;
+	}
+
+	public void setFrmJungleDreams(JFrame frmJungleDreams) {
+		this.frmJungleDreams = frmJungleDreams;
+	}
+
+	public JPanel getPanel() {
+		return panel;
+	}
+
+	public void setPanel(JPanel panel) {
+		this.panel = panel;
+	}
+
+	public JTextField getFechaEntrada() {
+		return fechaEntrada;
+	}
+
+	public void setFechaEntrada(JTextField fechaEntrada) {
+		this.fechaEntrada = fechaEntrada;
+	}
+
+	public JTextField getFechaSalida() {
+		return fechaSalida;
+	}
+
+	public void setFechaSalida(JTextField fechaSalida) {
+		this.fechaSalida = fechaSalida;
+	}
+
+	public JTextField getNumeroAdultos() {
+		return numeroAdultos;
+	}
+
+	public void setNumeroAdultos(JTextField numeroAdultos) {
+		this.numeroAdultos = numeroAdultos;
+	}
+
+	public JTextField getNumeroNinyos() {
+		return numeroNinyos;
+	}
+
+	public void setNumeroNinyos(JTextField numeroNinyos) {
+		this.numeroNinyos = numeroNinyos;
+	}
+
+	public JTextField getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(JTextField usuario) {
+		this.usuario = usuario;
+	}
+
+	public JDatePicker getTextoFechaDeEntrada() {
+		return textoFechaDeEntrada;
+	}
+
+	public void setTextoFechaDeEntrada(JDatePicker textoFechaDeEntrada) {
+		this.textoFechaDeEntrada = textoFechaDeEntrada;
+	}
+
+	public JDatePicker getTextoFechaDeSalida() {
+		return textoFechaDeSalida;
+	}
+
+	public void setTextoFechaDeSalida(JDatePicker textoFechaDeSalida) {
+		this.textoFechaDeSalida = textoFechaDeSalida;
+	}
+
+	public JComboBox getTextoUsuario() {
+		return textoUsuario;
+	}
+
+	public void setTextoUsuario(JComboBox textoUsuario) {
+		this.textoUsuario = textoUsuario;
+	}
+
+	public JSpinner getElegirNumeroDeAdultos() {
+		return elegirNumeroDeAdultos;
+	}
+
+	public void setElegirNumeroDeAdultos(JSpinner elegirNumeroDeAdultos) {
+		this.elegirNumeroDeAdultos = elegirNumeroDeAdultos;
+	}
+
+	public JSpinner getElegirNumeroDeNinyos() {
+		return elegirNumeroDeNinyos;
+	}
+
+	public void setElegirNumeroDeNinyos(JSpinner elegirNumeroDeNinyos) {
+		this.elegirNumeroDeNinyos = elegirNumeroDeNinyos;
+	}
+
+	public JButton getBotonInsertar() {
+		return botonModificarHabitacion;
+	}
+
+	public void setBotonInsertar(JButton botonInsertar) {
+		this.botonModificarHabitacion = botonInsertar;
+	}
+
+	public JButton getBotonCancelar() {
+		return botonCancelarHabitacion;
+	}
+
+	public void setBotonCancelar(JButton botonCancelar) {
+		this.botonCancelarHabitacion = botonCancelar;
+	}
+
+	public ReservasController getReservasController() {
+		return reservasController;
+	}
+
+	public void setReservasController(ReservasController reservasController) {
+		this.reservasController = reservasController;
+	}
+
+	public JButton getBotonInsertarHabitacion() {
+		return botonModificarHabitacion;
+	}
+
+	public void setBotonInsertarHabitacion(JButton botonInsertarHabitacion) {
+		this.botonModificarHabitacion = botonInsertarHabitacion;
+	}
+	
 }

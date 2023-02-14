@@ -200,6 +200,7 @@ public class ReservasModel {
 			guardarDatos.add(rs.getString("fecha_salida"));
 			guardarDatos.add(rs.getString("numero_adultos"));
 			guardarDatos.add(rs.getString("numero_ninyos"));
+			guardarDatos.add(rs.getString("user_id"));
 			
 			
 		} catch (SQLException e) {
@@ -220,25 +221,14 @@ public class ReservasModel {
 		return idReserva;
 	}
 	
-	public void modificarReservasConfirmar(String fecha_entrada, String fecha_salida, String numero_adultos, String numero_ninyos) {
+	public void modificarReservasConfirmar(String fecha_entrada, String fecha_salida, String numero_adultos, String numero_ninyos, String user_id) {
 		try {
 			rs.absolute(quedarse);
-			if(fecha_entrada.equals("")||fecha_entrada==null) {
-				fecha_entrada=null;
-			}
-			if(fecha_salida.equals("")||fecha_salida==null) {
-				fecha_salida=null;
-			}
-			if(numero_adultos.equals("")||numero_adultos==null) {
-				numero_adultos=null;
-			}
-			if(numero_ninyos.equals("")||numero_ninyos==null) {
-				numero_ninyos=null;
-			}
 			rs.updateString("fecha_entrada", fecha_entrada);
 			rs.updateString("fecha_salida", fecha_salida);
 			rs.updateString("numero_adultos", numero_adultos);
 			rs.updateString("numero_ninyos", numero_ninyos);
+			rs.updateString("user_id", user_id);
 			rs.updateString("updated_at", LocalDateTime.now().toString());
 			rs.updateRow();
 			rs.beforeFirst();

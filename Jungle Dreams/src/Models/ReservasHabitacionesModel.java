@@ -151,7 +151,30 @@ public class ReservasHabitacionesModel {
 				cant++;
 				rs.updateString("cantidad", String.valueOf(cant));
 				rs.updateString("precio", String.valueOf(prec));
+				rs.updateString("updated_at", LocalDateTime.now().toString());
 				rs.updateRow();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void eliminarReservaHabitacion(int posicion) {
+		try {
+			rs.absolute(posicion);
+			int cant=Integer.parseInt(rs.getString("cantidad"));
+			if(cant>1) {
+				double prec=Double.parseDouble(rs.getString("precio"));
+				prec-=(prec/cant);
+				cant--;
+				String cantidad=cant+"";
+				String precio=prec+"";
+				rs.updateString("cantidad", cantidad);
+				rs.updateString("precio", precio);
+				rs.updateRow();
+			}else {
+				rs.deleteRow();
+				rs.beforeFirst();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

@@ -19,6 +19,8 @@ import Models.UserModel;
 import View.CrearReserva;
 import View.CrearUsuario;
 import View.MenuPrincipal;
+import View.ModificarHabitacion;
+import View.ModificarReserva;
 import View.ModificarUsuario;
 import View.VerReservaHabitación;
 
@@ -31,7 +33,7 @@ public class ReservasController implements ActionListener,MouseListener{
 	CrearReserva crearReserva;
 	int respuesta=1;
 	String idReserva="1";
-	//ModificarReserva modificarReserva;
+	ModificarReserva modificarReserva;
 	public ReservasController(){}
 	public ReservasController(MenuPrincipal menuprincipal) {
 		this.menuPrincipal=menuprincipal;
@@ -40,10 +42,10 @@ public class ReservasController implements ActionListener,MouseListener{
 		this.verReservaHabitación=verReservaHabitación;
 	}
 	
-	/*public ReservasController(ModificarReserva modificarReserva) {
+	public ReservasController(ModificarReserva modificarReserva) {
 		this.modificarReserva=modificarReserva;
 	}
-	*/
+	
 	public ReservasController(CrearReserva crearReserva) {
 		this.crearReserva=crearReserva;
 	}
@@ -60,17 +62,73 @@ public class ReservasController implements ActionListener,MouseListener{
 			crearReserva.initialize();
 			break;
 		case "modificarReserva":
-			
+			if(menuPrincipal.getTableReservas().getSelectedRow()>=0) {
+				ArrayList<String> datosFila=new ArrayList<>();
+				modificarReserva=new ModificarReserva();
+				modificarReserva.initialize();
+				
+				
+				datosFila=reservasModel.modificarReservasMandar(menuPrincipal.getTableReservas().getSelectedRow()+(ReservasModel.getNumRegistroPagina()*(ReservasModel.getNumPagina()-1)));
+				fillDesplegablesReservasModificar();
+				SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd");
+				Date fechaEntradaDate=new Date();
+				Date fechaSalidaDate=new Date();
+				try {
+					fechaEntradaDate = parser.parse(datosFila.get(0));
+					fechaSalidaDate = parser.parse(datosFila.get(1));
+				} catch (ParseException e1) {
+					e1.printStackTrace();
+				}
+				
+				SimpleDateFormat formatter = new SimpleDateFormat("d MMM yyyy");
+				String fechaEntrada1 = formatter.format(fechaEntradaDate);
+				String fechaSalida1 = formatter.format(fechaSalidaDate);
+				
+				
+				modificarReserva.getTextoFechaDeEntrada().getFormattedTextField().setText(fechaEntrada1);
+				modificarReserva.getTextoFechaDeSalida().getFormattedTextField().setText(fechaSalida1);
+				modificarReserva.getElegirNumeroDeAdultos().setValue(Integer.parseInt(datosFila.get(2)));
+				modificarReserva.getElegirNumeroDeNinyos().setValue(Integer.parseInt(datosFila.get(3)));
+				modificarReserva.getTextoUsuario().setSelectedItem(datosFila.get(4));
+				
+			}
 			break;
 		case "DarQuitarBajaReserva":
 			reservasModel.DarQuitarBajaReserva(menuPrincipal.getTableReservas().getSelectedRow()+(ReservasModel.getNumRegistroPagina()*(ReservasModel.getNumPagina()-1)));
 			menuPrincipal.construirTablaReservas();
 			break;
 		case "modificarReservaVerdadera":
-			
+			if(modificarReserva.getTextoFechaDeEntrada().getFormattedTextField().getText().toString()==null||modificarReserva.getTextoFechaDeEntrada().getFormattedTextField().getText().toString().equals("")||modificarReserva.getTextoFechaDeSalida().getFormattedTextField().getText().toString()==null||modificarReserva.getTextoFechaDeSalida().getFormattedTextField().getText().toString().equals("")) {
+				JOptionPane.showMessageDialog(null, "Las fechas no pueden estar vacias");
+			}else {
+				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+				try {
+					SimpleDateFormat parser = new SimpleDateFormat("d MMM yyyy");
+					Date fechaEntradaDate = parser.parse(modificarReserva.getTextoFechaDeEntrada().getFormattedTextField().getText().toString());
+					Date fechaSalidaDate = parser.parse(modificarReserva.getTextoFechaDeSalida().getFormattedTextField().getText().toString());
+					
+					SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+					String fechaEntrada1 = formatter.format(fechaEntradaDate);
+					String fechaSalida1 = formatter.format(fechaSalidaDate);
+					
+					Date fechaEntrada=(Date)dateFormat.parse(fechaEntrada1);
+					Date fechaSalida=(Date)dateFormat.parse(fechaSalida1);
+					long miliseconds = System.currentTimeMillis();
+	                Date hoy = new Date(miliseconds);
+	                if(fechaEntrada.after(fechaSalida)||fechaEntrada.before(hoy)) {
+	                	JOptionPane.showMessageDialog(null, "Las fechas no concuerdan");
+					}else {
+						
+						reservasModel.modificarReservasConfirmar(fechaEntrada1, fechaSalida1, modificarReserva.getElegirNumeroDeAdultos().getValue().toString(), modificarReserva.getElegirNumeroDeNinyos().getValue().toString(), modificarReserva.getTextoUsuario().getSelectedItem().toString());
+						modificarReserva.getFrmJungleDreams().setVisible(false);
+					}
+				} catch (ParseException e1) {
+					e1.printStackTrace();
+				}
+			}
 			break;
 		case "modificarReservaCancelada":
-			
+			modificarReserva.getFrmJungleDreams().setVisible(false);
 			break;
 		case "crearReservaVerdadera":
 			
@@ -127,6 +185,19 @@ public class ReservasController implements ActionListener,MouseListener{
 			menuPrincipal.getTextoBuscarReservas().setText("");
 			menuPrincipal.getNumeroPaginaReservas().setText(ponerPaginas());
 			
+			break;
+		case "insertarHabitacionReserva":
+			String precioHabitacion=habitacionesModel.getHabitacionPrecio(verReservaHabitación.getElegirHabitacion().getSelectedItem().toString());
+			String id=habitacionesModel.getHabitacionId(verReservaHabitación.getElegirHabitacion().getSelectedItem().toString());
+			String rId=""+ReservasHabitacionesModel.getIdReserva();
+			reservasHabitacionesModel.crearReservasHabitaciones(id, rId, "1", precioHabitacion);
+			verReservaHabitación.construirTablaReservas();
+			break;
+		case "eliminarHabitacionReserva":
+			if(verReservaHabitación.getTable().getSelectedRow()>=0) {
+				reservasHabitacionesModel.eliminarReservaHabitacion(verReservaHabitación.getTable().getSelectedRow()+1);
+				verReservaHabitación.construirTablaReservas();
+			}
 			break;
 		default:
 			System.out.println("ERROR EN LA ACCIÓN");
@@ -190,6 +261,34 @@ public class ReservasController implements ActionListener,MouseListener{
 		crearReserva.getTextoUsuario().setModel(new DefaultComboBoxModel(userStrings));
 		crearReserva.getTextoHabitacion().setModel(new DefaultComboBoxModel(habitacionStrings));
 	}
+	
+	public void fillDesplegablesReservasModificar() {
+
+		ArrayList<UserModel> listaUsers = UserModel.getAllUsers();
+		
+		String[] userStrings = new String[listaUsers.size()];
+		
+		for (int i = 0; i < listaUsers.size(); i++) {
+			userStrings[i] = listaUsers.get(i).getEmail();
+
+		}
+		
+		modificarReserva.getTextoUsuario().setModel(new DefaultComboBoxModel(userStrings));
+	}
+	
+	public void fillDesplegablesReservasHabitaciones() {
+
+		ArrayList<HabitacionesModel> listaHabitaciones = HabitacionesModel.getAllHabitaciones();
+		
+		String[] habitacionStrings=new String[listaHabitaciones.size()];
+		
+		for (int i = 0; i < listaHabitaciones.size(); i++) {
+			habitacionStrings[i] = listaHabitaciones.get(i).getNombre();
+
+		}
+		
+		verReservaHabitación.getElegirHabitacion().setModel(new DefaultComboBoxModel(habitacionStrings));
+	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -221,9 +320,9 @@ public class ReservasController implements ActionListener,MouseListener{
 			if(e.getClickCount()==2) {
 				verReservaHabitación=new VerReservaHabitación();
 				int id=Integer.parseInt(menuPrincipal.getTableReservas().getValueAt(menuPrincipal.getTableReservas().getSelectedRow(), 0).toString());
-				reservasHabitacionesModel.setIdReserva(id);
+				ReservasHabitacionesModel.setIdReserva(id);
 				verReservaHabitación.initialize();
-				
+				fillDesplegablesReservasHabitaciones();
 			}
 		}
 		
