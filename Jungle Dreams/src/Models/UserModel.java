@@ -398,7 +398,27 @@ public class UserModel {
 		UserModel.numPagina = numPagina;
 	}
 	
+	public static ArrayList<UserModel> getAllUsers() {
+		ArrayList<UserModel> usuarios=new ArrayList<>();
+		try {
+			rs=stmt.executeQuery("SELECT * FROM users WHERE fecha_baja IS NULL");
+			rs.beforeFirst();
+			while(rs.next()) {
+				usuarios.add(new UserModel(rs.getString("email"), rs.getString("password"), rs.getString("token"),
+						rs.getString("fecha_validez_token"), rs.getString("nombre"), rs.getString("apellidos"), rs.getString("telefono"),
+						rs.getString("fecha_baja"), rs.getString("created_at"), rs.getString("updated_at")));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return usuarios;
+	}
 	
-	
-	
+	public static void resetearQuery() {
+		try {
+			rs=stmt.executeQuery("SELECT * FROM users WHERE fecha_baja IS NULL");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }

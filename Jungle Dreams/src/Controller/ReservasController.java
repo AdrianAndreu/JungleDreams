@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
 import Models.HabitacionesModel;
@@ -72,31 +73,35 @@ public class ReservasController implements ActionListener,MouseListener{
 			
 			break;
 		case "crearReservaVerdadera":
-			if(crearReserva.getTextoFechaDeEntrada().getText().toString()==null||crearReserva.getTextoFechaDeEntrada().getText().toString().equals("")||crearReserva.getTextoFechaDeSalida().getText().toString()==null||crearReserva.getTextoFechaDeSalida().getText().toString().equals("")) {
+			
+			if(crearReserva.getTextoFechaDeEntrada().getFormattedTextField().getText().toString()==null||crearReserva.getTextoFechaDeEntrada().getFormattedTextField().getText().toString().equals("")||crearReserva.getTextoFechaDeSalida().getFormattedTextField().getText().toString()==null||crearReserva.getTextoFechaDeSalida().getFormattedTextField().getText().toString().equals("")) {
 				JOptionPane.showMessageDialog(null, "Las fechas no pueden estar vacias");
-			}else if(crearReserva.getElegirNumeroDeAdultos().getValue().toString().equals("0")) {
-				JOptionPane.showMessageDialog(null, "Debe de haber mínimo 1 adulto en la reserva");
-			}else if(crearReserva.getTextoUsuario().getText().toString()==null||crearReserva.getTextoUsuario().getText().toString().equals("")) {
-				JOptionPane.showMessageDialog(null, "Se necesita asociar un usuario a una reserva");
-			}else if(crearReserva.getTextoHabitacion().getText().toString()==null||crearReserva.getTextoHabitacion().getText().toString().equals("")) {
-				JOptionPane.showMessageDialog(null, "Se necesita asociar una habitación a una reserva");
 			}else {
 				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 				try {
-					Date fechaEntrada=(Date)dateFormat.parse(crearReserva.getTextoFechaDeEntrada().getText().toString());
-					Date fechaSalida=(Date)dateFormat.parse(crearReserva.getTextoFechaDeSalida().getText().toString());
+					SimpleDateFormat parser = new SimpleDateFormat("d MMM yyyy");
+					Date fechaEntradaDate = parser.parse(crearReserva.getTextoFechaDeEntrada().getFormattedTextField().getText().toString());
+					Date fechaSalidaDate = parser.parse(crearReserva.getTextoFechaDeSalida().getFormattedTextField().getText().toString());
+					
+					SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+					String fechaEntrada1 = formatter.format(fechaEntradaDate);
+					String fechaSalida1 = formatter.format(fechaSalidaDate);
+					
+					Date fechaEntrada=(Date)dateFormat.parse(fechaEntrada1);
+					Date fechaSalida=(Date)dateFormat.parse(fechaSalida1);
 					long miliseconds = System.currentTimeMillis();
 	                Date hoy = new Date(miliseconds);
 	                if(fechaEntrada.after(fechaSalida)||fechaEntrada.before(hoy)) {
 	                	JOptionPane.showMessageDialog(null, "Las fechas no concuerdan");
 					}else {
 						if(respuesta==1) {
-							reservasModel.crearReserva(crearReserva.getTextoFechaDeEntrada().getText().toString(), crearReserva.getTextoFechaDeSalida().getText().toString(), crearReserva.getElegirNumeroDeAdultos().getValue().toString(), crearReserva.getElegirNumeroDeNinyos().getValue().toString(), crearReserva.getTextoUsuario().getText().toString());
+							reservasModel.crearReserva(fechaEntrada1, fechaSalida1, crearReserva.getElegirNumeroDeAdultos().getValue().toString(), crearReserva.getElegirNumeroDeNinyos().getValue().toString(), crearReserva.getTextoUsuario().getSelectedItem().toString());
 							idReserva=reservasModel.devolverUltimaReserva();
 						}
 						
-						String precioHabitacion=habitacionesModel.getHabitacionPrecio(crearReserva.getTextoHabitacion().getText().toString());
-						reservasHabitacionesModel.crearReservasHabitaciones(crearReserva.getTextoHabitacion().getText().toString(), idReserva, "1", precioHabitacion);
+						String precioHabitacion=habitacionesModel.getHabitacionPrecio(crearReserva.getTextoHabitacion().getSelectedItem().toString());
+						String id=habitacionesModel.getHabitacionId(crearReserva.getTextoHabitacion().getSelectedItem().toString());
+						reservasHabitacionesModel.crearReservasHabitaciones(id, idReserva, "1", precioHabitacion);
 						crearReserva.getTextoFechaDeEntrada().setEnabled(false);
 						crearReserva.getTextoFechaDeSalida().setEnabled(false);
 						crearReserva.getElegirNumeroDeAdultos().setEnabled(false);
@@ -111,17 +116,17 @@ public class ReservasController implements ActionListener,MouseListener{
 				} catch (ParseException e1) {
 					e1.printStackTrace();
 				}
-				
-				
 			}
 			break;
 		case "crearReservaCancelada":
 			crearReserva.getFrmJungleDreams().setVisible(false);
 			break;
 		case "refrescarReservas":
+			ReservasModel.resetearQuery();
 			menuPrincipal.construirTablaReservas();
 			menuPrincipal.getTextoBuscarReservas().setText("");
 			menuPrincipal.getNumeroPaginaReservas().setText(ponerPaginas());
+			
 			break;
 		default:
 			System.out.println("ERROR EN LA ACCIÓN");
@@ -163,6 +168,27 @@ public class ReservasController implements ActionListener,MouseListener{
 			matrizInfo[i][6]=arrayReservasHabitacion.get(i).getUpdated_at();
 		}
 		return matrizInfo;
+	}
+	
+	public void fillDesplegablesReservas() {
+
+		ArrayList<UserModel> listaUsers = UserModel.getAllUsers();
+		ArrayList<HabitacionesModel> listaHabitaciones = HabitacionesModel.getAllHabitaciones();
+
+		String[] userStrings = new String[listaUsers.size()];
+		String[] habitacionStrings=new String[listaHabitaciones.size()];
+
+		for (int i = 0; i < listaUsers.size(); i++) {
+			userStrings[i] = listaUsers.get(i).getEmail();
+
+		}
+		for (int i = 0; i < listaHabitaciones.size(); i++) {
+			habitacionStrings[i] = listaHabitaciones.get(i).getNombre();
+
+		}
+
+		crearReserva.getTextoUsuario().setModel(new DefaultComboBoxModel(userStrings));
+		crearReserva.getTextoHabitacion().setModel(new DefaultComboBoxModel(habitacionStrings));
 	}
 
 	@Override

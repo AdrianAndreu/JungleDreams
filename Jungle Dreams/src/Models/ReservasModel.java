@@ -320,4 +320,11 @@ public class ReservasModel {
 		return reservasDatabase;
 	}
 	
+	public static void resetearQuery() {
+		try {
+			rs=stmt.executeQuery("SELECT * FROM reservas WHERE fecha_baja IS NULL");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }

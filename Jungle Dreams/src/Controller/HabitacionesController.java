@@ -124,6 +124,7 @@ public class HabitacionesController implements ActionListener,MouseListener{
 				crearHabitacion.getFrmJungleDreams().setVisible(false);
 			break;
 		case "refrescarHabitaciones":
+			HabitacionesModel.resetearQuery();
 			menuPrincipal.construirTablaHabitaciones();
 			menuPrincipal.getTextoBuscarHabitaciones().setText("");
 			menuPrincipal.getNumeroPaginasHabitaciones().setText(ponerPaginas());

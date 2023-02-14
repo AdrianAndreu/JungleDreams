@@ -8,5 +8,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="C:/Users/Usuario/Desktop/json-20220320.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Usuario/Desktop/mariadb-java-client-3.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Usuario/Desktop/jdatepicker-2.0.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Usuario/Desktop/swingx-all-1.6.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

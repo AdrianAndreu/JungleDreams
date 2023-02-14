@@ -289,11 +289,10 @@ public class HabitacionesModel {
 		return habitacionesDatabase;
 	}
 	
-	public String getHabitacionPrecio(String id) {
+	public String getHabitacionPrecio(String nombre) {
 		String precioH="0.0";
-		int idH=Integer.parseInt(id);
 		try {
-			rs=stmt.executeQuery("SELECT * FROM habitaciones WHERE fecha_baja IS NULL AND id="+idH+"");
+			rs=stmt.executeQuery("SELECT * FROM habitaciones WHERE fecha_baja IS NULL AND nombre=\""+nombre+"\"");
 			while(rs.next()) {
 				precioH=rs.getString("precio");
 			}
@@ -301,5 +300,43 @@ public class HabitacionesModel {
 			e.printStackTrace();
 		}
 		return precioH;
+	}
+	
+	
+	public String getHabitacionId(String nombre) {
+		String id="1";
+		try {
+			rs=stmt.executeQuery("SELECT * FROM habitaciones WHERE fecha_baja IS NULL AND nombre=\""+nombre+"\"");
+			while(rs.next()) {
+				id=rs.getString("id");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return id;
+	}
+	
+	public static ArrayList<HabitacionesModel> getAllHabitaciones() {
+		ArrayList<HabitacionesModel> habitaciones=new ArrayList<>();
+		try {
+			rs=stmt.executeQuery("SELECT * FROM habitaciones WHERE fecha_baja IS NULL");
+			rs.beforeFirst();
+			while(rs.next()) {
+				habitaciones.add(new HabitacionesModel(rs.getString("id"), rs.getString("nombre"), rs.getString("descripcion"),
+						rs.getString("cantidad"), rs.getString("precio"), rs.getString("numero_maximo_personas"), rs.getString("numero_camas"),
+						rs.getString("fecha_baja"), rs.getString("created_at"), rs.getString("updated_at")));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return habitaciones;
+	}
+	
+	public static void resetearQuery() {
+		try {
+			rs=stmt.executeQuery("SELECT * FROM habitaciones WHERE fecha_baja IS NULL");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }

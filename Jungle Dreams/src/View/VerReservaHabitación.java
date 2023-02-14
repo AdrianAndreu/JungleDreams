@@ -15,8 +15,9 @@ import javax.swing.JTable;
 import Controller.ReservasController;
 import java.awt.FlowLayout;
 import java.awt.BorderLayout;
+import javax.swing.JLabel;
 
-public class VerReservaHabitación {
+public class VerReservaHabitaciÃ³n {
 
 	private JFrame frmJungleDreams;
 	private JPanel panel;
@@ -27,11 +28,13 @@ public class VerReservaHabitación {
 	private JPanel panel_3;
 	private JScrollPane scrollPane;
 	private JTable table;
+	private JLabel PrecioTotal;
+	private double precio;
 
 	/**
 	 * Create the application.
 	 */
-	public VerReservaHabitación() {
+	public VerReservaHabitaciÃ³n() {
 	}
 
 	/**
@@ -65,6 +68,10 @@ public class VerReservaHabitación {
 		panel_2.setOpaque(false);
 		panel.add(panel_2, BorderLayout.SOUTH);
 		
+		PrecioTotal = new JLabel("Precio total:");
+		PrecioTotal.setFont(new Font("Tahoma", Font.BOLD, 14));
+		panel_2.add(PrecioTotal);
+		
 		panel_4 = new JPanel();
 		panel_4.setOpaque(false);
 		panel.add(panel_4, BorderLayout.WEST);
@@ -80,12 +87,17 @@ public class VerReservaHabitación {
 		
 		construirTablaReservas();
 		
+		
 	}
 	
 	public void construirTablaReservas() {
-		String titulos[]={"ID","Habitacion ID","Reserva ID","Cantidad","Precio","Fecha de creación","Fecha de modificación"};
+		String titulos[]={"ID","Habitacion ID","Reserva ID","Cantidad","Precio","Fecha de creaciÃ³n","Fecha de modificaciÃ³n"};
 		String informacion[][]=reservasController.obtenerMatrizReservasHabitacion();
-		
+		precio=0;
+		for(int i=0;i<informacion.length;i++) {
+			precio+=Double.parseDouble(informacion[i][4].toString());
+		}
+		PrecioTotal.setText("Precio total: "+precio+"â‚¬");
 		table = new JTable(informacion,titulos);
 		table.setDefaultEditor(Object.class, null);
 		table.setSelectionBackground(new Color(196, 245, 141));

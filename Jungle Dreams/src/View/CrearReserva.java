@@ -10,7 +10,11 @@ import javax.swing.JTextField;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 
+import org.jdatepicker.JDatePicker;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+
 import Controller.ReservasController;
+import Controller.UserController;
 
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
@@ -27,11 +31,11 @@ public class CrearReserva {
 	private JTextField numeroAdultos;
 	private JTextField numeroNinyos;
 	private JTextField usuario;
-	private JTextField textoFechaDeEntrada;
-	private JTextField textoFechaDeSalida;
-	private JTextField textoUsuario;
+	private JDatePicker textoFechaDeEntrada;
+	private JDatePicker textoFechaDeSalida;
+	private JComboBox textoUsuario;
 	private JTextField Habitacion;
-	private JTextField textoHabitacion;
+	private JComboBox textoHabitacion;
 	private JSpinner elegirNumeroDeAdultos;
 	private JSpinner elegirNumeroDeNinyos;
 	private JButton botonInsertar;
@@ -118,32 +122,29 @@ public class CrearReserva {
 		usuario.setBounds(167, 207, 96, 19);
 		panel.add(usuario);
 		
-		textoFechaDeEntrada = new JTextField();
+		textoFechaDeEntrada = new JDatePicker();
 		textoFechaDeEntrada.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		textoFechaDeEntrada.setColumns(10);
-		textoFechaDeEntrada.setBounds(273, 27, 96, 19);
+		textoFechaDeEntrada.setBounds(273, 27, 151, 19);
 		panel.add(textoFechaDeEntrada);
 		
-		textoFechaDeSalida = new JTextField();
+		textoFechaDeSalida = new JDatePicker();
 		textoFechaDeSalida.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		textoFechaDeSalida.setColumns(10);
-		textoFechaDeSalida.setBounds(273, 73, 96, 19);
+		textoFechaDeSalida.setBounds(273, 73, 151, 19);
 		panel.add(textoFechaDeSalida);
 		
 		elegirNumeroDeAdultos = new JSpinner();
-		elegirNumeroDeAdultos.setModel(new SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
-		elegirNumeroDeAdultos.setBounds(273, 118, 96, 20);
+		elegirNumeroDeAdultos.setModel(new SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
+		elegirNumeroDeAdultos.setBounds(273, 118, 151, 20);
 		panel.add(elegirNumeroDeAdultos);
 		
 		elegirNumeroDeNinyos = new JSpinner();
 		elegirNumeroDeNinyos.setModel(new SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
-		elegirNumeroDeNinyos.setBounds(273, 164, 96, 20);
+		elegirNumeroDeNinyos.setBounds(273, 164, 151, 20);
 		panel.add(elegirNumeroDeNinyos);
 		
-		textoUsuario = new JTextField();
-		textoUsuario.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		textoUsuario.setColumns(10);
-		textoUsuario.setBounds(273, 209, 96, 19);
+		textoUsuario = new JComboBox();
+		textoUsuario.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		textoUsuario.setBounds(273, 209, 151, 19);
 		panel.add(textoUsuario);
 		
 		Habitacion = new JTextField();
@@ -169,10 +170,9 @@ public class CrearReserva {
 		botonCancelar.setBounds(319, 302, 114, 37);
 		panel.add(botonCancelar);
 		
-		textoHabitacion = new JTextField();
-		textoHabitacion.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		textoHabitacion.setColumns(10);
-		textoHabitacion.setBounds(273, 251, 96, 19);
+		textoHabitacion = new JComboBox();
+		textoHabitacion.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		textoHabitacion.setBounds(273, 251, 151, 19);
 		panel.add(textoHabitacion);
 		frmJungleDreams.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		reservasController=new ReservasController(this);
@@ -180,6 +180,11 @@ public class CrearReserva {
 		botonCancelar.setActionCommand("crearReservaCancelada");
 		botonInsertar.addActionListener(reservasController);
 		botonCancelar.addActionListener(reservasController);
+		
+		AutoCompleteDecorator.decorate(textoUsuario);
+		AutoCompleteDecorator.decorate(textoHabitacion);
+		
+		reservasController.fillDesplegablesReservas();
 	}
 
 	public JFrame getFrmJungleDreams() {
@@ -238,27 +243,24 @@ public class CrearReserva {
 		this.usuario = usuario;
 	}
 
-	public JTextField getTextoFechaDeEntrada() {
-		return textoFechaDeEntrada;
-	}
 
-	public void setTextoFechaDeEntrada(JTextField textoFechaDeEntrada) {
+	public void setTextoFechaDeEntrada(JDatePicker textoFechaDeEntrada) {
 		this.textoFechaDeEntrada = textoFechaDeEntrada;
 	}
 
-	public JTextField getTextoFechaDeSalida() {
+	public JDatePicker getTextoFechaDeSalida() {
 		return textoFechaDeSalida;
 	}
 
-	public void setTextoFechaDeSalida(JTextField textoFechaDeSalida) {
+	public void setTextoFechaDeSalida(JDatePicker textoFechaDeSalida) {
 		this.textoFechaDeSalida = textoFechaDeSalida;
 	}
 
-	public JTextField getTextoUsuario() {
+	public JComboBox getTextoUsuario() {
 		return textoUsuario;
 	}
 
-	public void setTextoUsuario(JTextField textoUsuario) {
+	public void setTextoUsuario(JComboBox textoUsuario) {
 		this.textoUsuario = textoUsuario;
 	}
 
@@ -270,11 +272,11 @@ public class CrearReserva {
 		Habitacion = habitacion;
 	}
 
-	public JTextField getTextoHabitacion() {
+	public JComboBox getTextoHabitacion() {
 		return textoHabitacion;
 	}
 
-	public void setTextoHabitacion(JTextField textoHabitacion) {
+	public void setTextoHabitacion(JComboBox textoHabitacion) {
 		this.textoHabitacion = textoHabitacion;
 	}
 
@@ -317,6 +319,9 @@ public class CrearReserva {
 	public void setReservasController(ReservasController reservasController) {
 		this.reservasController = reservasController;
 	}
-	
+
+	public JDatePicker getTextoFechaDeEntrada() {
+		return textoFechaDeEntrada;
+	}
 	
 }

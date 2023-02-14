@@ -7,6 +7,8 @@ import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -104,9 +106,34 @@ public class UserController implements ActionListener,MouseListener{
 				menuPrincipal.construirTabla();
 				break;
 			case "modificarUsuarioVerdadero":
-				modificarUsuario.getFrmJungleDreams().setVisible(false);
-				userModel.modificarUsuariosConfirmar(modificarUsuario.getNuevoEmail().getText().toString(),modificarUsuario.getNuevaPassword().getText().toString(),modificarUsuario.getNuevoNombre().getText().toString(),modificarUsuario.getNuevosApellidos().getText().toString(),modificarUsuario.getNuevoTelefono().getText().toString());
 				
+		        Pattern patronTexto = Pattern.compile("[a-zA-ZñÑüÜáéíóúÁÉÍÓÚ\\s]{3,}");
+		        Matcher mNombre = patronTexto.matcher(modificarUsuario.getNuevoNombre().getText().toString());
+		        Matcher mApellidos = patronTexto.matcher(modificarUsuario.getNuevosApellidos().getText().toString());
+		        Pattern patronContrasenya = Pattern.compile("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$");
+		        Matcher mContrasenya = patronContrasenya.matcher(modificarUsuario.getNuevaPassword().getText().toString());
+		        Pattern patronTelefono = Pattern.compile("\\d{9}");
+		        Matcher mTelefono = patronTelefono.matcher(modificarUsuario.getNuevoTelefono().getText().toString());
+		        
+	        	if(mNombre.matches()) {
+	        		if(mApellidos.matches()) {
+	        			if(mContrasenya.matches()) {
+	        				if(mTelefono.matches()) {
+	        					modificarUsuario.getFrmJungleDreams().setVisible(false);
+	        					userModel.modificarUsuariosConfirmar(modificarUsuario.getNuevoEmail().getText().toString(),modificarUsuario.getNuevaPassword().getText().toString(),modificarUsuario.getNuevoNombre().getText().toString(),modificarUsuario.getNuevosApellidos().getText().toString(),modificarUsuario.getNuevoTelefono().getText().toString());
+	        				}else{
+	        					JOptionPane.showMessageDialog(null, "Ese teléfono es incorrecto, solo se admiten teléfonos españoles");
+	        				}
+	        			}else {
+	        				JOptionPane.showMessageDialog(null, "La contraseña debe de tener como mínimo una mayúscula, una minúscula, un número y un carácter especial");
+	        			}
+		        	}else {
+		        		JOptionPane.showMessageDialog(null, "Ese apellido no es válido");
+		        	}
+	        	}else {
+	        		JOptionPane.showMessageDialog(null, "Ese nombre no es válido");
+	        	}
+								
 				break;
 			case "modificarUsuarioCancelado":
 	
@@ -117,11 +144,41 @@ public class UserController implements ActionListener,MouseListener{
 				if(crearUsuario.getEmail().getText().toString()==null||crearUsuario.getEmail().getText().toString().equals("")||crearUsuario.getPassword().getText().toString()==null||crearUsuario.getPassword().getText().toString().equals("")) {
 					JOptionPane.showMessageDialog(null, "El email y la contraseña no pueden estar vacios");
 				}else {
-					if(userModel.crearUsuarios(crearUsuario.getEmail().getText().toString(), crearUsuario.getPassword().getText().toString(), crearUsuario.getNombre().getText().toString(), crearUsuario.getApellidos().getText().toString(), crearUsuario.getTelefono().getText().toString())) {
-						crearUsuario.getFrmJungleDreams().setVisible(false);
-					}else{
-						JOptionPane.showMessageDialog(null, "Ese email ya existe");
-					}
+					Pattern patronEmail = Pattern.compile("^([0-9a-zA-Z]+[-._+&])*[0-9a-zA-Z]+@([-0-9a-zA-Z]+[.])+[a-zA-Z]{2,6}$");
+			        Matcher mEmail1 = patronEmail.matcher(crearUsuario.getEmail().getText().toString());
+			        Pattern patronTexto1 = Pattern.compile("[a-zA-ZñÑüÜáéíóúÁÉÍÓÚ\\s]{3,}");
+			        Matcher mNombre1 = patronTexto1.matcher(crearUsuario.getNombre().getText().toString());
+			        Matcher mApellidos1 = patronTexto1.matcher(crearUsuario.getApellidos().getText().toString());
+			        Pattern patronContrasenya1 = Pattern.compile("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$");
+			        Matcher mContrasenya1 = patronContrasenya1.matcher(crearUsuario.getPassword().getText().toString());
+			        Pattern patronTelefono1 = Pattern.compile("\\d{9}");
+			        Matcher mTelefono1 = patronTelefono1.matcher(crearUsuario.getTelefono().getText().toString());
+			        if(mEmail1.matches()) {
+			        	if(mNombre1.matches()) {
+			        		if(mApellidos1.matches()) {
+			        			if(mContrasenya1.matches()) {
+			        				if(mTelefono1.matches()) {
+			        					if(userModel.crearUsuarios(crearUsuario.getEmail().getText().toString(), crearUsuario.getPassword().getText().toString(), crearUsuario.getNombre().getText().toString(), crearUsuario.getApellidos().getText().toString(), crearUsuario.getTelefono().getText().toString())) {
+											crearUsuario.getFrmJungleDreams().setVisible(false);
+										}else{
+											JOptionPane.showMessageDialog(null, "Ese email ya existe");
+										}
+			        				}else{
+			        					JOptionPane.showMessageDialog(null, "Ese teléfono es incorrecto, solo se admiten teléfonos españoles");
+			        				}
+			        			}else {
+			        				JOptionPane.showMessageDialog(null, "La contraseña debe de tener como mínimo una mayúscula, una minúscula, un número y un carácter especial");
+			        			}
+				        	}else {
+				        		JOptionPane.showMessageDialog(null, "Ese apellido no es válido");
+				        	}
+			        	}else {
+			        		JOptionPane.showMessageDialog(null, "Ese nombre no es válido");
+			        	}
+			        }else {
+			        	JOptionPane.showMessageDialog(null, "Ese email no es válido");
+			        }
+					
 					
 				}
 				break;
@@ -131,6 +188,7 @@ public class UserController implements ActionListener,MouseListener{
 				
 				break;
 			case "refrescarUsuarios":
+				UserModel.resetearQuery();
 				menuPrincipal.construirTabla();
 				menuPrincipal.getTextoBuscarUsuarios().setText("");
 				menuPrincipal.getNumeroPagina().setText(ponerPaginas());

@@ -1,27 +1,22 @@
-package Models;
+package Controller;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class ServidorModel {
+public class ClienteController {
 	private Socket socket;
-	private ServerSocket serverSocket;
 	private DataInputStream bufferDeEntrada;
 	private DataOutputStream bufferDeSalida;
-	private String respuesta;
-
+	Scanner sc=new Scanner(System.in);
 	String COMANDO_TERMINACION = "salir";
 	
-	public void levantarConexion(int puerto) {
+	public void levantarConexion(String ip, int puerto) {
 		try {
-			serverSocket= new ServerSocket(puerto);
-			System.out.println("Esperando conexión entrante en el puerto "+puerto+"...");
-			socket = serverSocket.accept();
-			System.out.println("Conexión establecida con: "+socket.getInetAddress().getHostName()+"\n\n\n");
+			socket= new Socket(ip, puerto);
+			System.out.println("Conectado a :" + socket.getInetAddress().getHostName());
 		} catch (IOException e) {
 			System.err.println("Error en levantarConexión(): "+e.getMessage());
 			System.exit(0);
@@ -42,8 +37,8 @@ public class ServidorModel {
 		try {
 			do {
 				st=(String)bufferDeEntrada.readUTF();
-				System.out.println("\n[Cliente] => "+st);
-				
+				System.out.println("\n[Servidor] => "+st);
+				//TODO
 			}while(!st.equals(COMANDO_TERMINACION));
 		} catch (IOException e) {
 			cerrarConexion();
@@ -60,9 +55,13 @@ public class ServidorModel {
 	}
 	
 	public void escribirDatos() {
+		String entrada="";
 		while(true) {
-			System.out.println("[Servidor] => ");
-			enviar(respuesta);
+			System.out.println("[Cliente] => ");
+			entrada=sc.nextLine();
+			if(entrada.length()>0) {
+				enviar(entrada);
+			}
 		}
 	}
 	
@@ -77,29 +76,29 @@ public class ServidorModel {
 			System.out.println("Conversación finalizada...");
 			System.exit(0);
 		}
+		
 	}
-	public void ejecutarConexion(int puerto) {
+	public void ejecutarConexion(String ip, int puerto) {
 		Thread hilo=new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				while(true) {
-					try {
-						levantarConexion(puerto);
-						flujos();
-						recibirDatos();
-					}finally {
-						cerrarConexion();
-					}
+		@Override
+		public void run() {
+			while(true) {
+				try {
+					levantarConexion(ip, puerto);
+					flujos();
+					recibirDatos();
+				}finally {
+					cerrarConexion();
 				}
-				
 			}
+			
+		}
+			
 		});
 		hilo.start();
 	}
-	
-	public void iniciarServidor() {
-		ejecutarConexion(5050);
-		escribirDatos();
-	}
+	public void iniciarCliente() throws IOException {
+        ejecutarConexion("localhost", 5050);
+        escribirDatos();
+    }
 }
