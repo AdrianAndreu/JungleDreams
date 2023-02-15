@@ -11,7 +11,9 @@ public class ClienteController {
 	private DataInputStream bufferDeEntrada;
 	private DataOutputStream bufferDeSalida;
 	Scanner sc=new Scanner(System.in);
-	String COMANDO_TERMINACION = "salir";
+	String COMANDO="";
+	
+	public ClienteController() {}
 	
 	public void levantarConexion(String ip, int puerto) {
 		try {
@@ -35,11 +37,8 @@ public class ClienteController {
 	public void recibirDatos() {
 		String st="";
 		try {
-			do {
-				st=(String)bufferDeEntrada.readUTF();
-				System.out.println("\n[Servidor] => "+st);
-				//TODO
-			}while(!st.equals(COMANDO_TERMINACION));
+			st=(String)bufferDeEntrada.readUTF();
+			System.out.println("\n[Servidor] => "+st);
 		} catch (IOException e) {
 			cerrarConexion();
 		}
